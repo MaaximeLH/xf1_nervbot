@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<addon addon_id="NervBot" title="NervBot" version_string="1.0.0" version_id="1" url="" install_callback_class="NervBot_Install" install_callback_method="install" uninstall_callback_class="NervBot_Install" uninstall_callback_method="uninstall">
+  <admin_navigation/>
+  <admin_permissions/>
+  <admin_style_properties/>
+  <admin_templates/>
+  <admin_template_modifications/>
+  <code_events/>
+  <code_event_listeners>
+    <listener event_id="load_class_controller" execute_order="10" callback_class="NervBot_Listener_Listener" callback_method="load_controller" active="1" hint="" description="Etend le controller de la taigachat afin d'y ajouter de nouvelles options"/>
+  </code_event_listeners>
+  <cron/>
+  <email_templates/>
+  <email_template_modifications/>
+  <optiongroups>
+    <group group_id="nervbot" display_order="1" debug_only="0"/>
+    <option option_id="nervbot_bot_id" edit_format="spinbox" data_type="integer" can_backup="1">
+      <default_value>0</default_value>
+      <edit_format_params>min=0</edit_format_params>
+      <sub_options></sub_options>
+      <relation group_id="nervbot" display_order="1"/>
+    </option>
+    <option option_id="nervbot_response_perpage" edit_format="spinbox" data_type="integer" can_backup="1">
+      <default_value>10</default_value>
+      <edit_format_params>min=1</edit_format_params>
+      <sub_options></sub_options>
+      <relation group_id="nervbot" display_order="1"/>
+    </option>
+  </optiongroups>
+  <permissions>
+    <permission_groups>
+      <permission_group permission_group_id="nervbot"/>
+    </permission_groups>
+    <permissions>
+      <permission permission_group_id="nervbot" permission_id="manage" permission_type="flag" default_value="unset" interface_group_id="nervbot" display_order="1"/>
+    </permissions>
+    <interface_groups>
+      <interface_group interface_group_id="nervbot" display_order="1"/>
+    </interface_groups>
+  </permissions>
+  <phrases>
+    <phrase title="nervbot_detect" version_id="1" version_string="1.0.0"><![CDATA[Détecter]]></phrase>
+    <phrase title="nervbot_invalid_fields" version_id="1" version_string="1.0.0"><![CDATA[Les champs validés sont invalides ou contiennent des valeurs inattendues. ]]></phrase>
+    <phrase title="nervbot_mode" version_id="1" version_string="1.0.0"><![CDATA[Mode]]></phrase>
+    <phrase title="nervbot_mode_explain" version_id="1" version_string="1.0.0"><![CDATA[Le mode normal cherchera une occurrence 100% identique, tandis que le mode strict cherchera simplement un seul mot.]]></phrase>
+    <phrase title="nervbot_mode_normal" version_id="1" version_string="1.0.0"><![CDATA[Normal]]></phrase>
+    <phrase title="nervbot_mode_strict" version_id="1" version_string="1.0.0"><![CDATA[Strict]]></phrase>
+    <phrase title="nervbot_response" version_id="1" version_string="1.0.0"><![CDATA[Répondre]]></phrase>
+    <phrase title="nervbot_response_not_found" version_id="1" version_string="1.0.0"><![CDATA[La réponse demandée n'a pas été trouvée.]]></phrase>
+    <phrase title="nervbot_taigachat_control" version_id="1" version_string="1.0.0"><![CDATA[Réponses]]></phrase>
+    <phrase title="nervbot_title" version_id="1" version_string="1.0.0"><![CDATA[Réponses pré-définies]]></phrase>
+    <phrase title="option_group_nervbot" version_id="1" version_string="1.0.0"><![CDATA[Paramètre de NervBot]]></phrase>
+    <phrase title="option_group_nervbot_description" version_id="1" version_string="1.0.0"><![CDATA[Modifier les paramètres de l'add-on NervBot]]></phrase>
+    <phrase title="option_nervbot_bot_id" version_id="1" version_string="1.0.0"><![CDATA[ID du BOT]]></phrase>
+    <phrase title="option_nervbot_bot_id_explain" version_id="1" version_string="1.0.0"><![CDATA[Le BOT est un utilisateur comme les autres qui possède un ID]]></phrase>
+    <phrase title="option_nervbot_response_perpage" version_id="1" version_string="1.0.0"><![CDATA[Nombre de réponse par page]]></phrase>
+    <phrase title="option_nervbot_response_perpage_explain" version_id="1" version_string="1.0.0"><![CDATA[Choisissez le nombre de réponse à afficher par page]]></phrase>
+    <phrase title="permission_group_nervbot" version_id="1" version_string="1.0.0"><![CDATA[Groupe de permissions de l'add-on NervBot]]></phrase>
+    <phrase title="permission_interface_nervbot" version_id="1" version_string="1.0.0"><![CDATA[Interface de l'add-on NervBot]]></phrase>
+    <phrase title="permission_nervbot_manage" version_id="1" version_string="1.0.0"><![CDATA[Peut gérer les réponses pré-définies]]></phrase>
+  </phrases>
+  <route_prefixes/>
+  <style_properties/>
+  <templates>
+    <template title="nervbot_add" version_id="1" version_string="1.0.0"><![CDATA[<xen:navigation>
+  	<xen:breadcrumb href="{xen:link {$route}}">{xen:phrase nervbot_title}</xen:breadcrumb>
+</xen:navigation>
+
+<xen:title>{xen:phrase nervbot_title}</xen:title>
+
+<form method="post" enctype="multipart/form-data" autocomplete="off" class="xenForm AutoValidator" action="{xen:link {$route}}" data-redirect="on">
+<fieldset>
+   <dl class="ctrlUnit">
+      <dt><label>{xen:phrase nervbot_detect}:</label></dt>
+         <dd>
+	    <input type="text" name="detect" class="textCtrl" />
+         </dd>
+   </dl>
+   
+      <dl class="ctrlUnit">
+      <dt><label>{xen:phrase nervbot_response}:</label></dt>
+         <dd>
+	    <input type="text" name="response" class="textCtrl" />
+         </dd>
+   </dl>
+   
+     <dl class="ctrlUnit">
+      <dt><label>{xen:phrase nervbot_mode}:</label></dt>
+         <dd>
+	    <select class="textCtrl" name="mode">
+	   	<option value="normal">{xen:phrase nervbot_mode_normal}</option>
+	    	<option value="strict">{xen:phrase nervbot_mode_strict}</option>
+	    </select>
+	    <p class="explain">{xen:phrase nervbot_mode_explain}</p>
+         </dd>
+   </dl>
+   
+   
+   <dl class="ctrlUnit submitUnit">
+	<dt></dt>
+	<input type="hidden" name="_xfToken" value="{$visitor.csrf_token_page}" />
+	<dd><input type="submit" class="button primary" /></dd>
+   </dl> 
+</fieldset>
+</form>
+
+<xen:if is="{$responses}">
+	<table class="dataTable">
+		<tbody>
+			<tr class="dataRow">
+				<th>{xen:phrase nervbot_detect}:</th>
+				<th>{xen:phrase nervbot_response}:</th>
+				<th>{xen:phrase nervbot_mode}:</th>
+				<th>{xen:phrase posted_by}:</th>
+				<th>{xen:phrase action}:</th>
+			</tr>
+			<xen:foreach loop="$responses" value="$response">
+				<tr class="dataRow">
+					<td>{$response.detect}</td>
+					<td>{$response.response}</td>
+					<td>{$response.detect_mode}</td>
+					<td><xen:username user="$response.response_by" rich="true"></xen:username></td>
+					<td><a href="{xen:link {$deleteRoute}, '', 'id={$response.response_id}'}" class="button primary formOverlay">Supprimer la phrase</a></td>
+				</tr>
+			</xen:foreach>
+
+		</tbody>
+	</table>
+	
+	<xen:pagenav link="{xen:link chat/responses}" page="{$page}" perpage="{$perPage}" total="{$total}" />
+</xen:if>]]></template>
+  </templates>
+  <public_template_modifications>
+    <modification template="dark_taigachat_controls" modification_key="nervbot_control" description="Ajoute un bouton pour gérer les réponses" execution_order="10" enabled="1" action="str_replace">
+      <find><![CDATA[<xen:if is="({$taigachat.toolbar} == 1 AND !{$taigachat.alt} AND !{$taigachat.sidebar}) OR ({$taigachat.toolbar} == 2 AND (!{$taigachat.sidebar} OR ({$taigachat.sidebar} AND {$taigachat.alt}))) OR ({$taigachat.toolbar} == 3)">
+			<div id='taigachat_toolbar'>
+
+				<xen:if is="{$taigachat.canColor}"><a id="taigachat_colorpicker" class="button taigachat_bbcode xenForoSkin OverlayTrigger" data-cacheOverlay="false" href="{xen:link 'taigachat/color-picker'}"><span class='taigachat_bbcode_color'></span></a></xen:if>
+
+				<xen:if is="{$taigachat.toolbar_bbcode}">
+					<xen:require css="editor_ui.css" />
+					<xen:foreach loop="$taigachat.toolbar_bbcode" value="$code" key="$title">
+						<button data-code='{$code}' class='button taigachat_bbcode xenForoSkin'>{xen:raw $title}</button>
+					</xen:foreach>
+				</xen:if>
+				<xen:if is="{$taigachat.toolbar_smilies}">
+					<button id="taigachat_smiliepicker" class="button taigachat_bbcode xenForoSkin"><span class='taigachat_bbcode_smilie'></span></button>
+				</xen:if>
+			</div>
+		</xen:if>]]></find>
+      <replace><![CDATA[<xen:if is="({$taigachat.toolbar} == 1 AND !{$taigachat.alt} AND !{$taigachat.sidebar}) OR ({$taigachat.toolbar} == 2 AND (!{$taigachat.sidebar} OR ({$taigachat.sidebar} AND {$taigachat.alt}))) OR ({$taigachat.toolbar} == 3)">
+			<div id='taigachat_toolbar'>
+
+				<xen:if is="{$taigachat.canColor}"><a id="taigachat_colorpicker" class="button taigachat_bbcode xenForoSkin OverlayTrigger" data-cacheOverlay="false" href="{xen:link 'taigachat/color-picker'}"><span class='taigachat_bbcode_color'></span></a></xen:if>
+
+				<xen:if is="{$taigachat.toolbar_bbcode}">
+					<xen:require css="editor_ui.css" />
+					<xen:foreach loop="$taigachat.toolbar_bbcode" value="$code" key="$title">
+						<button data-code='{$code}' class='button taigachat_bbcode xenForoSkin'>{xen:raw $title}</button>
+					</xen:foreach>
+				</xen:if>
+				<xen:if is="{$taigachat.toolbar_smilies}">
+					<button id="taigachat_smiliepicker" class="button taigachat_bbcode xenForoSkin"><span class='taigachat_bbcode_smilie'></span></button>
+				</xen:if>
+				<xen:if is="{$canManageResponse}">
+					<a href="{xen:link {$taigachatRoute}}" class="button taigachat_bbcode xenForoSkin">{xen:phrase nervbot_taigachat_control}</a>
+				</xen:if>
+			</div>
+				<xen:elseif is="{$canManageResponse}" />
+					<a href="{xen:link {$taigachatRoute}}" class="button taigachat_bbcode xenForoSkin">{xen:phrase nervbot_taigachat_control}</a>
+		</xen:if>]]></replace>
+    </modification>
+  </public_template_modifications>
+  <bb_code_media_sites/>
+  <bb_codes/>
+</addon>
